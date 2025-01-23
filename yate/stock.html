@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة المنتجات</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #aa0b0b, #ff758c, #e4e4e4);
+            background-size: 300% 300%;
+            animation: gradientAnimation 6s infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+
+        li {
+            background: #f9f9f9;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        li button {
+            background: #f44336;
+            padding: 6px 10px;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        li button:hover {
+            background: #d32f2f;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            li {
+                font-size: 12px;
+            }
+        }
+        .bottom {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4c65af;
+            padding: 8px 16px; /* Petit bouton */
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 128, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+   </style>
+</head>
+<body>
+    <div class="container">
+        <h1>إضافة المنتجات</h1>
+        <input type="text" id="productName" placeholder="اسم المنتج" aria-label="اسم المنتج">
+        <input type="number" id="productPrice" placeholder="السعر الأصلي (DZD)" aria-label="السعر الأصلي">
+        <button onclick="addProduct()">إضافة المنتج</button>
+
+        <ul id="productList"></ul>
+    </div>
+
+    <script>
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+
+        function saveProducts() {
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+
+            if (!name || isNaN(price) || price < 0) {
+                alert('يرجى إدخال اسم المنتج وسعر صحيح.');
+                return;
+            }
+
+            products.push({ name, price });
+            saveProducts();
+            updateProductList();
+
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            saveProducts();
+            updateProductList();
+        }
+
+        function updateProductList() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            products.forEach((product, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${product.name} - ${product.price.toFixed(2)} DZD</span>
+                    <button onclick="deleteProduct(${index})">حذف</button>
+                `;
+                productList.appendChild(li);
+            });
+        }
+
+        window.onload = updateProductList;
+    </script>
+<a class="bottom" href="choix.html"><strong>back</strong></a>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب الأرباح</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #aa0b0b, #ff758c, #e4e4e4);
+            background-size: 300% 300%;
+            animation: gradientAnimation 5s infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 600px;
+            margin: 10px;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #4caf50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #ffefd5;
+        }
+
+        input, button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            font-size: 16px;
+            text-align: center;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        img {
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                font-size: 12px;
+                padding: 6px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+    
+    
+    
+    .bottom {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4c65af;
+            padding: 8px 16px; /* Petit bouton */
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 128, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+    
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حساب الأرباح</h1>
+        <table id="itemsTable">
+            <thead>
+                <tr>
+                    <th>اسم المنتج</th>
+                    <th>سعر البيع (DZD)</th>
+                    <th>السعر الأصلي (DZD)</th>
+                    <th>الصورة</th>
+                    <th>الإجراء</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <label for="itemName">اسم المنتج:</label>
+        <input type="text" id="itemName" placeholder="أدخل اسم المنتج">
+
+        <label for="itemRevenue">سعر البيع (DZD):</label>
+        <input type="number" id="itemRevenue" placeholder="أدخل سعر البيع">
+
+        <label for="itemExpense">السعر الأصلي (DZD):</label>
+        <input type="number" id="itemExpense" placeholder="أدخل السعر الأصلي">
+
+        <label for="itemImage">رابط الصورة:</label>
+        <input type="text" id="itemImage" placeholder="أدخل رابط الصورة">
+
+        <button onclick="addItem()">إضافة</button>
+        <div class="result" id="result">سيتم عرض صافي الربح هنا.</div>
+    </div>
+
+    <script>
+        let items = JSON.parse(localStorage.getItem('items')) || [];
+
+        function saveItems() {
+            localStorage.setItem('items', JSON.stringify(items));
+        }
+
+        function addItem() {
+            const name = document.getElementById('itemName').value.trim();
+            const revenue = parseFloat(document.getElementById('itemRevenue').value);
+            const expense = parseFloat(document.getElementById('itemExpense').value);
+            const image = document.getElementById('itemImage').value.trim();
+
+            if (!name || isNaN(revenue) || isNaN(expense) || revenue < 0 || expense < 0) {
+                alert('يرجى ملء جميع الحقول.');
+                return;
+            }
+
+            items.push({ name, revenue, expense, image });
+            saveItems();
+            updateTable();
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemRevenue').value = '';
+            document.getElementById('itemExpense').value = '';
+            document.getElementById('itemImage').value = '';
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+            saveItems();
+            updateTable();
+        }
+
+        function updateTable() {
+            const tableBody = document.querySelector('#itemsTable tbody');
+            tableBody.innerHTML = '';
+            let totalProfit = 0;
+
+            items.forEach((item, index) => {
+                const profit = item.revenue - item.expense;
+                totalProfit += profit;
+                const row = `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.revenue.toFixed(2)}</td>
+                        <td>${item.expense.toFixed(2)}</td>
+                        <td><img src="${item.image}" alt="${item.name}"></td>
+                        <td><button onclick="deleteItem(${index})">حذف</button></td>
+                    </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+
+            document.getElementById('result').textContent =
+                totalProfit >= 0 ? `صافي الربح: ${totalProfit.toFixed(2)} DZD` : `صافي الخسارة: ${Math.abs(totalProfit).toFixed(2)} DZD`;
+        }
+
+        window.onload = updateTable;
+    </script>
+ 
+
+    <div class="container">
+        <h1><strong>stock</strong></h1>
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>اسم المنتج</th>
+                    <th>السعر الأصلي (DZD)</th>
+                    <th>الإجراء</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <button onclick="syncProducts()">تحديث البيانات</button>
+    </div>
+
+    <script>
+        function loadProducts() {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const tableBody = document.querySelector('#productTable tbody');
+            tableBody.innerHTML = ''; // Réinitialiser le tableau
+
+            products.forEach((product, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.price.toFixed(2)} DZD</td>
+                    <td><button onclick="deleteProduct(${index})">حذف</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function deleteProduct(index) {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(products));
+            loadProducts();
+        }
+
+        function syncProducts() {
+            loadProducts();
+        }
+
+        // Charger les produits au démarrage
+        window.onload = loadProducts;
+    </script>
+
+<a class="bottom" href="choix.html"><strong>back</strong></a>
+</body>
+</html>

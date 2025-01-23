@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Mobile</title>
+    <style>
+        /* Style général */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #aa0b0b, #ff758c, #e4e4e4);
+            background-size: 300% 300%;
+            animation: gradientAnimation 5s infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Formulaire */
+        form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 360px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ff4786;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            border-color: #ff4786;
+            box-shadow: 0 0 8px rgba(255, 71, 134, 0.5);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(90deg, #ff4786, #ff7eb3);
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 71, 134, 0.5);
+        }
+
+        /* Animation de pop-in */
+        form {
+            animation: popIn 0.8s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            form {
+                padding: 15px;
+                border-radius: 8px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            input, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <form id="loginForm">
+        <h2>Bienvenue</h2>
+        <input type="password" id="password" placeholder="Entrez le mot de passe" required>
+        <button type="submit">Connexion</button>
+    </form>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const password = document.getElementById("password").value;
+            if (password === "Ouragla03039") {
+                
+                window.location.href = "choix.html"; // Redirection vers la page principale
+            } else {
+                alert("Mot de passe incorrect !");
+            }
+        });
+    </script>
+
+
+
+</body>
+</html>

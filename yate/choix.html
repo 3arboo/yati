@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صفحة الاختيار</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(45deg, #aa0b0b, #ff758c, #e4e4e4);
+        background-size: 300% 300%;
+        animation: gradientAnimation 5s infinite;
+    }
+
+    @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 50px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    .title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      animation: fadeIn 2s ease-in;
+    }
+    .button {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+    .button:hover {
+      transform: scale(1.1);
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">اختر صفحة</div>
+    <a href="stock.html" class="button"><strong>صفحة مخزون</strong></a><br><br>
+    <a href="index.html" class="button"><strong>صفحة المبيعات والأرباح</strong></a><br><br>
+    <!-- Nouveau bouton -->
+    <a href="liste.html" class="button"><strong>دين</strong></a>
+  </div>
+
+  <script>
+    // Animation or interactivity can be added in this section
+    document.querySelectorAll('.button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.backgroundColor = '#45a049';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.backgroundColor = '#4CAF50';
+      });
+    });
+  </script>
+</body>
+</html>
